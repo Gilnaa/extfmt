@@ -1,8 +1,14 @@
 [package]
 name = "extfmt"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Gilad Naaman <gilad.naaman@gmail.com>"]
 description="Extended formatting options for commmon types"
+
 license="Apache-2.0"
+repository="https://github.com/Gilnaa/extfmt"
+readme="README.md"
+
+keywords=["formatting"]
+categories=["value-formatting"]
 
 [dependencies]
