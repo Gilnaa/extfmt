@@ -2,5 +2,7 @@
 name = "extfmt"
 version = "0.1.0"
 authors = ["Gilad Naaman <gilad.naaman@gmail.com>"]
+description="Extended formatting options for commmon types"
+license="Apache-2.0"
 
 [dependencies]

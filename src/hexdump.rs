@@ -120,8 +120,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-    	let data = &[1u8,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
-        println!("{}", hexdump!(data, items_per_row: 12));
+    fn readme() {
+    	assert_eq!(format!("{}", hexdump!(&[1u8, 2, 255, 64])), "00000000	01 02 ff 40");
+    	assert_eq!(format!("{}", hexdump!(64)), "00000000	40 00 00 00");
+		assert_eq!(format!("{}", hexdump!(64, show_index: false)), "40 00 00 00");
     }
 }

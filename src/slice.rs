@@ -97,3 +97,15 @@ impl<'a> Display for Hexlify<'a> {
 		<Self as LowerHex>::fmt(self, f)
 	}
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn readme() {
+    	assert_eq!(format!("{:02x}", CommaSeparated(&[1, 2, 255, 64])), "[01, 02, ff, 40]");
+    	assert_eq!(format!("{}", Hexlify(&[1, 2, 255, 64])), "0102ff40");
+    }
+}
