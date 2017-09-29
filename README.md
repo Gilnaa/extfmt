@@ -1,5 +1,7 @@
 # extfmt
 
+[![](http://meritbadge.herokuapp.com/extfmt)](https://crates.io/crates/extfmt)
+
 A crate with additional formatting options for Rust types
 
 ## Usage
