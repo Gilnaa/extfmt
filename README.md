@@ -10,12 +10,10 @@ Add the dependency to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-extfmt = "0.1"
+extfmt = "0.2"
 ```
 
 ```rust
-extern crate extfmt;
-
 use extfmt::*;
 
 fn main() {
@@ -35,12 +33,8 @@ fn main() {
 	println!("{}", hexdump!(&[1u8, 2, 255, 64]));
 	// 	 => 00000000	01 02 ff 40
 
-	// Hexdump can also be used as a memory view for Sized types.
-	println!("{}", hexdump!(64));
-	//   => 00000000	40 00 00 00
-
 	// Further hexdump options
-	println!("{}", hexdump!(64, show_index: false));
+	println!("{}", hexdump!(&[64u8, 0, 0, 0], show_index: false));
 	//   => 40 00 00 00
 }
 ```
