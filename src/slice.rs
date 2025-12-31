@@ -48,7 +48,9 @@ macro_rules! additional_slice_formatting {
     }
 }
 
-additional_slice_formatting!( Display, Debug, Binary, Octal, LowerHex, UpperHex, LowerExp, UpperExp, Pointer );
+additional_slice_formatting!(
+    Display, Debug, Binary, Octal, LowerHex, UpperHex, LowerExp, UpperExp, Pointer
+);
 
 /// Formats a byte-buffer as a series of concatanated hex-pairs.
 ///
@@ -67,37 +69,36 @@ additional_slice_formatting!( Display, Debug, Binary, Octal, LowerHex, UpperHex,
 pub struct Hexlify<'a>(pub &'a [u8]);
 
 impl<'a> LowerHex for Hexlify<'a> {
-	fn fmt(&self, f: &mut Formatter) -> Result {
-		for byte in self.0.iter() {
-			write!(f, "{:02x}", byte)?;
-		}
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        for byte in self.0.iter() {
+            write!(f, "{:02x}", byte)?;
+        }
 
-		Ok(())
-	}
+        Ok(())
+    }
 }
 
 impl<'a> UpperHex for Hexlify<'a> {
-	fn fmt(&self, f: &mut Formatter) -> Result {
-		for byte in self.0.iter() {
-			write!(f, "{:02X}", byte)?;
-		}
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        for byte in self.0.iter() {
+            write!(f, "{:02X}", byte)?;
+        }
 
-		Ok(())
-	}
+        Ok(())
+    }
 }
 
 impl<'a> Debug for Hexlify<'a> {
-	fn fmt(&self, f: &mut Formatter) -> Result {
-		<Self as LowerHex>::fmt(self, f)
-	}
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        <Self as LowerHex>::fmt(self, f)
+    }
 }
 
 impl<'a> Display for Hexlify<'a> {
-	fn fmt(&self, f: &mut Formatter) -> Result {
-		<Self as LowerHex>::fmt(self, f)
-	}
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        <Self as LowerHex>::fmt(self, f)
+    }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -105,7 +106,10 @@ mod tests {
 
     #[test]
     fn readme() {
-    	assert_eq!(format!("{:02x}", CommaSeparated(&[1, 2, 255, 64])), "[01, 02, ff, 40]");
-    	assert_eq!(format!("{}", Hexlify(&[1, 2, 255, 64])), "0102ff40");
+        assert_eq!(
+            format!("{:02x}", CommaSeparated(&[1, 2, 255, 64])),
+            "[01, 02, ff, 40]"
+        );
+        assert_eq!(format!("{}", Hexlify(&[1, 2, 255, 64])), "0102ff40");
     }
 }

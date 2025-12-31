@@ -2,8 +2,8 @@
 
 extern crate core;
 
-mod slice;
 mod hexdump;
+mod slice;
 
-pub use slice::*;
 pub use hexdump::*;
+pub use slice::*;

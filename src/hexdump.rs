@@ -1,6 +1,5 @@
 use core::fmt::*;
 
-
 /// A formatting aid for pretty-printing a byte buffer,
 /// not unlike the `hexdump` utility.
 ///
@@ -12,83 +11,84 @@ use core::fmt::*;
 /// assert_eq!(format!("{}", dump), "00000000\t01 02 03 04 05 06 ff");
 /// ```
 pub struct Hexdump<'a> {
-	data: &'a [u8],
-	show_index: bool,
-	items_per_row: usize, 
+    data: &'a [u8],
+    show_index: bool,
+    items_per_row: usize,
 }
 
 impl<'a> Hexdump<'a> {
-	/// Creates a new Hexdump instance from a byte slice.
-	pub fn new(data: &'a [u8]) -> Self {
-		Hexdump {
-			data,
-			show_index: true,
-			items_per_row: 16
-		}
-	}
+    /// Creates a new Hexdump instance from a byte slice.
+    pub fn new(data: &'a [u8]) -> Self {
+        Hexdump {
+            data,
+            show_index: true,
+            items_per_row: 16,
+        }
+    }
 
-	/// Controls whether or not to show the current index at the beginning of each row.
-	///
-	/// Default: true
-	pub fn show_index(&mut self, value: bool) -> &mut Self {
-		self.show_index = value;
-		self
-	}
+    /// Controls whether or not to show the current index at the beginning of each row.
+    ///
+    /// Default: true
+    pub fn show_index(&mut self, value: bool) -> &mut Self {
+        self.show_index = value;
+        self
+    }
 
-	/// Controls the amount of bytes to print in each row.
-	///
-	/// Default: 16
-	pub fn items_per_row(&mut self, value: usize) -> &mut Self {
-		self.items_per_row = value;
-		self
-	}
+    /// Controls the amount of bytes to print in each row.
+    ///
+    /// Default: 16
+    pub fn items_per_row(&mut self, value: usize) -> &mut Self {
+        self.items_per_row = value;
+        self
+    }
 }
 
 impl<'a> Display for Hexdump<'a> {
-	fn fmt(&self, f: &mut Formatter) -> Result {
-		for i in 0..self.data.len() {
-			if self.show_index && i % self.items_per_row == 0 {
-				write!(f, "{:08x}\t", i)?;
-			}
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        for i in 0..self.data.len() {
+            if self.show_index && i % self.items_per_row == 0 {
+                write!(f, "{:08x}\t", i)?;
+            }
 
-			write!(f, "{:02x}", self.data[i])?;
+            write!(f, "{:02x}", self.data[i])?;
 
-			// Items separator
-			if i != self.data.len() - 1 {
-				// Start a new row when appropriate
-				if i % self.items_per_row == self.items_per_row - 1 {
-					f.write_char('\n')?;
-				}
-				else {
-					f.write_char(' ')?;
-				}
-			}
-		}
+            // Items separator
+            if i != self.data.len() - 1 {
+                // Start a new row when appropriate
+                if i % self.items_per_row == self.items_per_row - 1 {
+                    f.write_char('\n')?;
+                } else {
+                    f.write_char(' ')?;
+                }
+            }
+        }
 
-		Ok(())
-	}
+        Ok(())
+    }
 }
 
 /// A utility trait used to create Hexdump objects.
 pub trait AsHexdump {
-	fn as_hexdump(&self) -> Hexdump;
+    fn as_hexdump(&self) -> Hexdump;
 }
 
 impl<T: Sized> AsHexdump for T {
-	fn as_hexdump(&self) -> Hexdump {
-		let slice = unsafe { ::core::slice::from_raw_parts(
-    			self as *const _ as *const u8,
-    			::core::mem::size_of_val(self)
-		)};
-		
-    	Hexdump::new(slice)
-	}
+    fn as_hexdump(&self) -> Hexdump {
+        let slice = unsafe {
+            ::core::slice::from_raw_parts(
+                self as *const _ as *const u8,
+                ::core::mem::size_of_val(self),
+            )
+        };
+
+        Hexdump::new(slice)
+    }
 }
 
 impl AsHexdump for [u8] {
-	fn as_hexdump(&self) -> Hexdump {
-    	Hexdump::new(self)
-	}
+    fn as_hexdump(&self) -> Hexdump {
+        Hexdump::new(self)
+    }
 }
 
 /// Create a hexdump of the given value using the AsHexdump trait.
@@ -121,8 +121,14 @@ mod tests {
 
     #[test]
     fn readme() {
-    	assert_eq!(format!("{}", hexdump!(&[1u8, 2, 255, 64])), "00000000	01 02 ff 40");
-    	assert_eq!(format!("{}", hexdump!(64)), "00000000	40 00 00 00");
-		assert_eq!(format!("{}", hexdump!(64, show_index: false)), "40 00 00 00");
+        assert_eq!(
+            format!("{}", hexdump!(&[1u8, 2, 255, 64])),
+            "00000000	01 02 ff 40"
+        );
+        assert_eq!(format!("{}", hexdump!(64)), "00000000	40 00 00 00");
+        assert_eq!(
+            format!("{}", hexdump!(64, show_index: false)),
+            "40 00 00 00"
+        );
     }
 }
