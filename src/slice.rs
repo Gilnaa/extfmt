@@ -63,7 +63,7 @@ additional_slice_formatting!(
 /// use extfmt::*;
 ///
 /// assert_eq!(format!("{}", Hexlify(&[122, 123, 134])), "7a7b86");
-/// assert_eq!(format!("{:X}", Hexlify(&[122, 123, 134])), "7A7B86");
+/// assert_eq!(format!("{:x}", Hexlify(&[122, 123, 134])), "7a7b86");
 /// assert_eq!(format!("{:X}", Hexlify(&[122, 123, 134])), "7A7B86");
 /// ```
 pub struct Hexlify<'a>(pub &'a [u8]);

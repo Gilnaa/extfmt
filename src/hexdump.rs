@@ -69,25 +69,12 @@ impl<'a> Display for Hexdump<'a> {
 
 /// A utility trait used to create Hexdump objects.
 pub trait AsHexdump {
-    fn as_hexdump(&self) -> Hexdump;
+    fn as_hexdump(&self) -> Hexdump<'_>;
 }
 
-impl<T: Sized> AsHexdump for T {
-    fn as_hexdump(&self) -> Hexdump {
-        let slice = unsafe {
-            ::core::slice::from_raw_parts(
-                self as *const _ as *const u8,
-                ::core::mem::size_of_val(self),
-            )
-        };
-
-        Hexdump::new(slice)
-    }
-}
-
-impl AsHexdump for [u8] {
-    fn as_hexdump(&self) -> Hexdump {
-        Hexdump::new(self)
+impl<T: AsRef<[u8]>> AsHexdump for T {
+    fn as_hexdump(&self) -> Hexdump<'_> {
+        Hexdump::new(self.as_ref())
     }
 }
 
@@ -125,9 +112,12 @@ mod tests {
             format!("{}", hexdump!(&[1u8, 2, 255, 64])),
             "00000000	01 02 ff 40"
         );
-        assert_eq!(format!("{}", hexdump!(64)), "00000000	40 00 00 00");
         assert_eq!(
-            format!("{}", hexdump!(64, show_index: false)),
+            format!("{}", hexdump!(64i32.to_le_bytes())),
+            "00000000	40 00 00 00"
+        );
+        assert_eq!(
+            format!("{}", hexdump!(64i32.to_le_bytes(), show_index: false)),
             "40 00 00 00"
         );
     }
